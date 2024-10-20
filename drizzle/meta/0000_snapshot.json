@@ -1,0 +1,408 @@
+{
+  "id": "c352483f-d8ef-43dc-a58b-97c1888c6383",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.wiki_multi_media": {
+      "name": "wiki_multi_media",
+      "schema": "",
+      "columns": {
+        "media_id": {
+          "name": "media_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "page_id": {
+          "name": "page_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "url": {
+          "name": "url",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wiki_multi_media_page_id_wiki_pages_page_id_fk": {
+          "name": "wiki_multi_media_page_id_wiki_pages_page_id_fk",
+          "tableFrom": "wiki_multi_media",
+          "tableTo": "wiki_pages",
+          "columnsFrom": [
+            "page_id"
+          ],
+          "columnsTo": [
+            "page_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wiki_multi_media_url_unique": {
+          "name": "wiki_multi_media_url_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "url"
+          ]
+        }
+      }
+    },
+    "public.wiki_page_status": {
+      "name": "wiki_page_status",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "desc": {
+          "name": "desc",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wiki_page_status_desc_unique": {
+          "name": "wiki_page_status_desc_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "desc"
+          ]
+        }
+      }
+    },
+    "public.wiki_page_voting": {
+      "name": "wiki_page_voting",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_id": {
+          "name": "page_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vote": {
+          "name": "vote",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wiki_page_voting_user_id_wiki_user_user_id_fk": {
+          "name": "wiki_page_voting_user_id_wiki_user_user_id_fk",
+          "tableFrom": "wiki_page_voting",
+          "tableTo": "wiki_user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "wiki_page_voting_page_id_wiki_pages_page_id_fk": {
+          "name": "wiki_page_voting_page_id_wiki_pages_page_id_fk",
+          "tableFrom": "wiki_page_voting",
+          "tableTo": "wiki_pages",
+          "columnsFrom": [
+            "page_id"
+          ],
+          "columnsTo": [
+            "page_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {
+        "wiki_page_voting_page_id_user_id_pk": {
+          "name": "wiki_page_voting_page_id_user_id_pk",
+          "columns": [
+            "page_id",
+            "user_id"
+          ]
+        }
+      },
+      "uniqueConstraints": {
+        "wiki_page_voting_user_id_unique": {
+          "name": "wiki_page_voting_user_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "user_id"
+          ]
+        },
+        "wiki_page_voting_page_id_unique": {
+          "name": "wiki_page_voting_page_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "page_id"
+          ]
+        },
+        "wiki_page_voting_vote_unique": {
+          "name": "wiki_page_voting_vote_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "vote"
+          ]
+        }
+      }
+    },
+    "public.wiki_page_ranking": {
+      "name": "wiki_page_ranking",
+      "schema": "",
+      "columns": {
+        "page_id": {
+          "name": "page_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "up_votes": {
+          "name": "up_votes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "down_votes": {
+          "name": "down_votes",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wiki_page_ranking_page_id_wiki_pages_page_id_fk": {
+          "name": "wiki_page_ranking_page_id_wiki_pages_page_id_fk",
+          "tableFrom": "wiki_page_ranking",
+          "tableTo": "wiki_pages",
+          "columnsFrom": [
+            "page_id"
+          ],
+          "columnsTo": [
+            "page_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wiki_page_ranking_page_id_unique": {
+          "name": "wiki_page_ranking_page_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "page_id"
+          ]
+        }
+      }
+    },
+    "public.wiki_pages": {
+      "name": "wiki_pages",
+      "schema": "",
+      "columns": {
+        "page_id": {
+          "name": "page_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "author_id": {
+          "name": "author_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "wiki_pages_author_id_wiki_user_user_id_fk": {
+          "name": "wiki_pages_author_id_wiki_user_user_id_fk",
+          "tableFrom": "wiki_pages",
+          "tableTo": "wiki_user",
+          "columnsFrom": [
+            "author_id"
+          ],
+          "columnsTo": [
+            "user_id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "wiki_pages_status_wiki_page_status_id_fk": {
+          "name": "wiki_pages_status_wiki_page_status_id_fk",
+          "tableFrom": "wiki_pages",
+          "tableTo": "wiki_page_status",
+          "columnsFrom": [
+            "status"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wiki_pages_title_unique": {
+          "name": "wiki_pages_title_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "title"
+          ]
+        }
+      }
+    },
+    "public.wiki_user": {
+      "name": "wiki_user",
+      "schema": "",
+      "columns": {
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(35)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "middle_name": {
+          "name": "middle_name",
+          "type": "varchar(35)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(35)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password": {
+          "name": "password",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sex": {
+          "name": "sex",
+          "type": "varchar(7)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "dob": {
+          "name": "dob",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "CURRENT_TIMESTAMP"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "wiki_user_email_unique": {
+          "name": "wiki_user_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
