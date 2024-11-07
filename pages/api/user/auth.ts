@@ -39,3 +39,15 @@ export default async function handle(
 
   res.status(200).json(user.value);
 }
+
+export async function authUser(email: string, password: string) {
+  const usrId = await validateUserByEmail(email, password);
+  if (!usrId.ok) {
+    return { error: usrId.error };
+  }
+  const user = await getUserByUserId(usrId.value);
+  if (!user.ok) {
+    return { error: user.error };
+  }
+  return { user: user.value };
+}
