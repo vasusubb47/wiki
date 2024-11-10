@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
 import { getUserByEmail, type PublicUserType } from "~/server/model/user";
-import type { ErrorMsg } from "~/utility/types";
+import type { ErrorMsg, Result } from "~/utility/types";
 import { isValidBody } from "~/utility/utylity";
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse<PublicUserType | ErrorMsg>) {
@@ -24,4 +24,12 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse<P
     }
 
     res.status(200).json(user.value);
+}
+
+export async function fetchUserByEmail(email: string): Promise<Result<PublicUserType, ErrorMsg>> {
+    const user = await getUserByEmail(email);
+    if (!user.ok) {
+        return { ok: false, error: user.error };
+    }
+    return { ok: true, value: user.value };
 }

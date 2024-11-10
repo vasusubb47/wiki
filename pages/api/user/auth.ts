@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
-import { validateUserByEmail, getUserByUserId } from "~/server/model/user";
+import { validateUserByEmail, getUserByUserId, type PublicUserType } from "~/server/model/user";
+import { type ErrorMsg, type Result } from "~/utility/types";
 import { isValidBody } from "~/utility/utylity";
 
 export default async function handle(
@@ -40,14 +41,14 @@ export default async function handle(
   res.status(200).json(user.value);
 }
 
-export async function authUser(email: string, password: string) {
+export async function authUser(email: string, password: string): Promise<Result<PublicUserType, ErrorMsg>> {
   const usrId = await validateUserByEmail(email, password);
   if (!usrId.ok) {
-    return { error: usrId.error };
+    return { ok: false, error: usrId.error };
   }
   const user = await getUserByUserId(usrId.value);
   if (!user.ok) {
-    return { error: user.error };
+    return { ok: false, error: user.error };
   }
-  return { user: user.value };
+  return { ok: true, value: user.value };
 }

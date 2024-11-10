@@ -87,6 +87,9 @@ export const pages = createTable("pages",
   }
 );
 
+export const SelectPage = createSelectSchema(pages);
+export const InsertPage = createInsertSchema(pages).omit({id: true, createdAt: true, updatedAt: true});
+
 export const multiMedia = createTable("multi_media",
   {
     id: uuid("media_id").defaultRandom().primaryKey(),

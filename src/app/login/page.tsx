@@ -8,15 +8,15 @@ export default function Login() {
     "use server";
     const email = formData.get("email") as string ;
     const password = formData.get("password") as string;
-    console.log(email, password);
     const res = await authUser(email, password);
-    console.log(res);
-    if (res.error) {
+    if (!res.ok) {
       console.log(res.error);
     }
-    cookies().set("auth", JSON.stringify(res.user?.id));
-    cookies().set("user", JSON.stringify(res.user));
-    redirect("/");
+    if (res.ok) {
+      cookies().set("auth", JSON.stringify(res.value.id));
+      cookies().set("user", JSON.stringify(res.value));
+      redirect("/");
+    }
   }
 
   return (

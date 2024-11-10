@@ -1,7 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { InsertUser } from "~/server/db/schema";
-import { createNewUser } from "~/server/model/user";
+import { createNewUser, type InsertUserType } from "~/server/model/user";
+import { type ErrorMsg, type Result } from "~/utility/types";
 import { isValidBody } from "~/utility/utylity";
 
 export default async function handle(
@@ -21,4 +22,9 @@ export default async function handle(
   const userId = await createNewUser(req.body);
 
   res.status(200).json({ userId: userId });
+}
+
+export async function createUser(user: InsertUserType): Promise<Result<string, ErrorMsg>> {
+  const userId = await createNewUser(user);
+  return { ok: true, value: userId };
 }

@@ -1,7 +1,9 @@
 import "~/styles/globals.css";
 
 import { type Metadata } from "next";
-import Auth from "./context/auth";
+
+import Navbar from "~/components/navbar";
+import FootBar from "~/components/footer";
 
 export const metadata: Metadata = {
   title: "Wiki",
@@ -14,9 +16,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <Auth>
-        <body className="bg-gray-600">{children}</body>
-      </Auth>
+      <body className="bg-gray-600">
+        <Navbar />
+        {children}
+        <FootBar />
+      </body>
     </html>
   );
 }
